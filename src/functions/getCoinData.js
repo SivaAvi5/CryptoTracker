@@ -1,10 +1,10 @@
 import axios from "axios";
 
 export const getCoinData = async (id, setError) => {
-  const API_BASE_URL = "http://localhost:5000/api";
-
   try {
-    const response = await axios.get(`${API_BASE_URL}/coin/${id}`);
+    const response = await axios.get(
+      `https://api.coingecko.com/api/v3/coins/${id}`
+    );
 
     if (response.data) {
       return response.data;

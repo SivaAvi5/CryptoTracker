@@ -1,10 +1,10 @@
 import axios from "axios";
 
 export const get100Coins = async () => {
-  const API_BASE_URL = "http://localhost:5000/api";
-
   try {
-    const response = await axios.get(`${API_BASE_URL}/coins`);
+    const response = await axios.get(
+      `https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=100&page=1&sparkline=false`
+    );
     return response.data;
   } catch (error) {
     console.error("ERROR>>>", error.message);

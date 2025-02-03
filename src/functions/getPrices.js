@@ -1,25 +1,27 @@
 import axios from "axios";
 
-export const getPrices = async (id, days, priceType, setError) => {
-  const API_BASE_URL = "http://localhost:5000/api";
-
-  try {
-    const response = await axios.get(`${API_BASE_URL}/prices/${id}`, {
-      params: { days, priceType },
+export const getPrices = (id, days, priceType, setError) => {
+  const prices = axios
+    .get(
+      `https://api.coingecko.com/api/v3/coins/${id}/market_chart?vs_currency=usd&days=${days}&interval=daily`
+    )
+    .then((response) => {
+      if (response.data) {
+        if (priceType == "market_caps") {
+          return response.data.market_caps;
+        } else if (priceType == "total_volumes") {
+          return response.data.total_volumes;
+        } else {
+          return response.data.prices;
+        }
+      }
+    })
+    .catch((e) => {
+      console.log(e.message);
+      if (setError) {
+        setError(true);
+      }
     });
 
-    if (response.data) {
-      return response.data;
-    }
-
-    return null; // Explicitly return null if no data is received
-  } catch (error) {
-    console.error("Error fetching prices:", error.message);
-
-    if (setError) {
-      setError(error.message || "An error occurred while fetching prices.");
-    }
-
-    return null;
-  }
+  return prices;
 };
